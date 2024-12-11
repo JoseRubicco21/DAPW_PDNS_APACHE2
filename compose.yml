@@ -27,7 +27,7 @@ services:
   cliente:
     build: cliente
     dns:
-      - 92.168.22.2       # DNS primario 
+      - 192.168.22.2       # DNS primario 
     networks:
       powerdns-net:
         ipv4_address: 192.168.22.30    

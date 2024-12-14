@@ -1,4 +1,5 @@
 services:
+# ---------------------------------------------
   pdns:
     image: powerdns/pdns-auth-49:latest
     environment:
@@ -11,6 +12,7 @@ services:
     networks:
       powerdns-net:
         ipv4_address: 192.168.22.2 
+# -------------------------------------------
   powerdns-admin:
     image: powerdnsadmin/pda-legacy:latest
     environment:
@@ -24,6 +26,7 @@ services:
     networks:
       powerdns-net:
         ipv4_address: 192.168.22.3    
+# ------------------------------------------------
   cliente:
     build: cliente
     dns:
@@ -31,6 +34,29 @@ services:
     networks:
       powerdns-net:
         ipv4_address: 192.168.22.30    
+# ---------------------------------------------------
+  apache:
+    build: apache
+    volumes:
+      - ./html:/web
+      - ./html/alias:/srv
+      - ./vhosts/server1.conf:/etc/apache2/sites-enabled/server1.conf
+      - ./vhosts/server2.conf:/etc/apache2/sites-enabled/server2.conf
+    dns:
+      - 192.168.22.2       # DNS primario 
+    networks:
+      powerdns-net:
+        ipv4_address: 192.168.22.10 
+# ---------------------------------------------------
+  firefox:
+    image: jlesage/firefox
+    dns:
+      - 192.168.22.2
+    ports:
+      - 5800:5800
+    networks:
+      powerdns-net:
+        ipv4_address: 192.168.22.4
 
 networks:
   powerdns-net:
